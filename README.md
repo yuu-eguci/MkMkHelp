@@ -6,6 +6,6 @@ MkMkHelp
 ## Install
 
 ```bash
-# pipenv ある前提
+# pipenv + Python 3.10 ある前提
 pipenv sync
 ```
