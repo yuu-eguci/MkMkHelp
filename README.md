@@ -13,6 +13,6 @@ pipenv sync
 
 # mkmk_help total_row を編集。
 
-# 実行。 URL は適切に変えること。
+# 実行。本物の URL の掲載を避けています。 URL は適切に変えること。
 pipenv run python mkmk_help.py --base-url https://WWW.JAV.OR.JP
 ```
