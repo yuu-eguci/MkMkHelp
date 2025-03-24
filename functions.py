@@ -1,4 +1,5 @@
 import json
+import sys
 import time
 
 import pandas as pd
@@ -65,3 +66,10 @@ def extract_next_data_json(html: str) -> dict:
         except json.JSONDecodeError:
             print("JSON デコードに失敗しちゃった…")
     return {}
+
+
+def print_progress(current: int, total: int, name: str) -> None:
+    message = f"{current}（{name}）/{total} おわり"
+    sys.stdout.write("\r" + " " * 100 + "\r")
+    sys.stdout.write(message)
+    sys.stdout.flush()

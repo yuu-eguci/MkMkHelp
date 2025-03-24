@@ -1,11 +1,18 @@
 from time import sleep
 
-from functions import extract_next_data_json, extract_organization_list, fetch_html, fetch_rendered_html, save_to_excel
+from functions import (
+    extract_next_data_json,
+    extract_organization_list,
+    fetch_html,
+    fetch_rendered_html,
+    print_progress,
+    save_to_excel,
+)
 
 
 def main() -> None:
     # メッチャおもろいんだけど一度の表示件数をコッチで決めれるｗ
-    total_row = 3055
+    total_row = 100
     list_url = f"https://www.jab.or.jp/compatible_organizations?page=1&standards=140012015&pageSize={total_row}&nationality=JPN&classification=28"
 
     # html ゲット。
@@ -24,7 +31,7 @@ def main() -> None:
         # print(detail_json)
         org["regis_num"] = detail_json["props"]["pageProps"]["organization"]["attributes"]["regis_num"]
         del org["path"]
-        print(f"\r{i + 1}（{org['name']}）/{len(organizations)} おわり", end="", flush=True)
+        print_progress(i + 1, len(organizations), org["name"])
         # NOTE: 連続アクセスをやめようか。
         sleep(0.5)
 
