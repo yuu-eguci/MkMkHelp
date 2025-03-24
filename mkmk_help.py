@@ -1,3 +1,4 @@
+import argparse
 from time import sleep
 
 from functions import (
@@ -11,9 +12,14 @@ from functions import (
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--base-url", default="", help="Base url")
+    args = parser.parse_args()
+    base_url = args.base_url
+
     # メッチャおもろいんだけど一度の表示件数をコッチで決めれるｗ
-    total_row = 100
-    list_url = f"https://www.jab.or.jp/compatible_organizations?page=1&standards=140012015&pageSize={total_row}&nationality=JPN&classification=28"
+    total_row = 5
+    list_url = f"{base_url}/compatible_organizations?page=1&standards=140012015&pageSize={total_row}&nationality=JPN&classification=28"
 
     # html ゲット。
     html: str = fetch_rendered_html(list_url)
@@ -23,7 +29,7 @@ def main() -> None:
 
     for i, org in enumerate(organizations):
         # 1社ずつ詳細画面にアクセス。
-        detail_url = f"https://www.jab.or.jp{org['path']}"
+        detail_url = f"{base_url}{org['path']}"
         # print(detail_url)
         detail_html: str = fetch_html(detail_url)
         # print(detail_html)
