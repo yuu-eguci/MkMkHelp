@@ -24,7 +24,7 @@ def main() -> None:
 
     # メッチャおもろいんだけど一度の表示件数をコッチで決めれるｗ
     total_row = 5
-    list_url = f"{base_url}/compatible_organizations?page=1&standards=140012015&pageSize={total_row}&nationality=JPN&classification=28"
+    list_url = f"{base_url}/compatible_organizations?page=1&standards=140012015&pageSize={total_row}&nationality=JPN&classification=28" # noqa: E501
 
     # html ゲット。
     html: str = fetch_html_slowly(list_url, wait_sec=3)
