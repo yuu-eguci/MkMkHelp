@@ -47,6 +47,30 @@ def save_to_xlsx(data: list[dict[str, str]], filename: str) -> None:
     logger.info(f"{filename} おｋ")
 
 
+def save_to_csv(data: list[dict[str, str]], filename: str) -> None:
+    """
+    辞書のリストを csv ファイルとして保存します。
+    """
+
+    df = pd.DataFrame(data)
+    df.to_csv(filename, index=False, encoding="utf-8")
+    logger.info(f"{filename} おｋ")
+
+
+def normalize_csv_data(text: str) -> str:
+    """
+    CSV 用にテキストを正規化します。
+    改行文字を半角スペースに変換し、連続する空白を単一の空白にします。
+    """
+    if not text:
+        return ""
+    # 改行文字を半角スペースに変換 (CRLF を先に処理してから、残りの LF, CR を処理)
+    text = text.replace('\r\n', ' ').replace('\n', ' ').replace('\r', ' ')
+    # 連続する空白を単一の空白に
+    text = ' '.join(text.split())
+    return text.strip()
+
+
 def fetch_html(url: str) -> str:
     """
     指定された URL の HTML を取得して構造を表示する

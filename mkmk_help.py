@@ -2,11 +2,11 @@ import argparse
 import logging
 from time import sleep
 
-from jb import extract_next_data_from_html, extract_organizations_from_html
+from jb import build_organization_data, extract_next_data_from_html, extract_organizations_from_html
 from shared import (
     fetch_html,
     fetch_html_slowly,
-    save_to_xlsx,
+    save_to_csv,
     show_progress_with_name,
 )
 
@@ -46,11 +46,11 @@ def main() -> None:
         # print(detail_json) # <-- json みたいならこれ
         # NOTE: 順番を変えたいだけ。
         # [{name, location, url}, ...]
-        org = {
-            "name": org["name"],
-            "location": detail_json["props"]["pageProps"]["organization"]["attributes"]["location"],
-            "url": org["url"],
-        }
+        org = build_organization_data(
+            name=org["name"],
+            location=detail_json["props"]["pageProps"]["organization"]["attributes"]["location"],
+            url=org["url"]
+        )
         organizations[i] = org
         show_progress_with_name(i + 1, len(organizations), org["name"])
         # NOTE: 連続アクセスをやめようか。
@@ -59,7 +59,7 @@ def main() -> None:
     # NOTE: 改行のため
     print()
 
-    save_to_xlsx(organizations, "mkmk.xlsx")
+    save_to_csv(organizations, "mkmk.csv")
 
     logger.info("end mkmk_help")
 
