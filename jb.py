@@ -2,6 +2,7 @@ import json
 import logging
 
 from bs4 import BeautifulSoup
+
 from shared import normalize_csv_data
 
 logger = logging.getLogger(__name__)

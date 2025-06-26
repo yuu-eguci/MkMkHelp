@@ -49,7 +49,7 @@ def main() -> None:
         org = build_organization_data(
             name=org["name"],
             location=detail_json["props"]["pageProps"]["organization"]["attributes"]["location"],
-            url=org["url"]
+            url=org["url"],
         )
         organizations[i] = org
         show_progress_with_name(i + 1, len(organizations), org["name"])
