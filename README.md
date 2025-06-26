@@ -16,6 +16,9 @@ pipenv sync
 # 実行。本物の URL の掲載を避けています。 URL は適切に変えること。
 time pipenv run python mkmk_help.py --base-url https://WWW.JAV.OR.JP --total-row 1
 
+# 実行。
+time pipenv run python mkmk_help_2.py --csv ./mkmk.csv
+
 # 必要に応じて csv を xlsx に変換
 pipenv run python csv_to_xlsx.py --csv ./mkmk.csv --xlsx ./mkmk.xlsx
 
