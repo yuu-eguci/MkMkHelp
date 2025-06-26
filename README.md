@@ -18,6 +18,9 @@ time pipenv run python mkmk_help.py --base-url https://WWW.JAV.OR.JP --total-row
 
 # 必要に応じて csv を xlsx に変換
 pipenv run python csv_to_xlsx.py --csv ./mkmk.csv --xlsx ./mkmk.xlsx
+
+# 便利機能
+pipenv run python xlsx_to_csv.py --xlsx ./mkmk.xlsx --csv ./mkmk.csv
 ```
 
 ## Room for improvement
