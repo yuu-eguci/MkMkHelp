@@ -15,17 +15,45 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 def fetch_html_slowly(url: str, wait_sec: int = 3) -> str:
     """
     指定された URL にアクセスし、JavaScript 実行後の HTML をのんびり取得します。
+    Cloudflare の bot 検出を回避するための設定を追加。
     """
 
     options = Options()
     options.add_argument("--headless")
+    # Cloudflare 回避のための設定
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option("useAutomationExtension", False)
+    # User-Agent を設定
+    options.add_argument(
+        "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    )
     logger.info("options 準備おｋ")
 
     driver = webdriver.Chrome(options=options)
+
+    # WebDriver の自動化検出を無効化
+    driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+
     driver.get(url)
     logger.info("driver.get おｋ")
 
-    # AJAX を待つタイム。これをやりたいから bs4 ではなく、selenium を使っている。
+    # Cloudflare チャレンジページかどうかをチェック。
+    if "Just a moment..." in driver.page_source or "Verify you are human" in driver.page_source:
+        logger.info("Cloudflare チャレンジページを検出、待機中...")
+        # より長い時間待機してチャレンジの完了を待つ
+        max_wait = 30  # 最大30秒待機
+        for i in range(max_wait):
+            time.sleep(1)
+            if "Just a moment..." not in driver.page_source and "Verify you are human" not in driver.page_source:
+                logger.info(f"Cloudflare チャレンジ完了 ({i + 1}秒後)")
+                break
+            if i == max_wait - 1:
+                logger.warning("Cloudflare チャレンジのタイムアウト")
+
+    # 通常の待機時間
     time.sleep(wait_sec)
     logger.info("sleep おｋ")
 

@@ -14,6 +14,8 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/in
 
 choco install python --version=3.10 -y
 
+choco install googlechrome --ignore-checksums -y
+
 # ここでいったん ps 開き直す。
 
 pip install pipenv

@@ -71,6 +71,8 @@ def main() -> None:
             # HTML から検索結果の一覧を取得する
             search_results = jn.parse_search_results(html)
 
+            logger.info(f"[{idx}] 検索結果の取得おｋ: {len(search_results)} 件")
+
             # 一覧の中から、もっとも適切っぽいものを選ぶ。
             # "もっとも適切っぽい":
             #     csv から取得した住所と、 html から取得した住所 -> 正規化 -> 比較
@@ -78,6 +80,8 @@ def main() -> None:
 
             # それを csv へ!
             if best_match:
+                logger.info(f"[{idx}] 最適な一致を見つけた: {best_match}")
+
                 tel_raw = best_match.get("tel", "")
                 tel_no_hyphen, tel_hyphen = jn.split_tel_field(tel_raw)
 
@@ -87,15 +91,17 @@ def main() -> None:
                 df_sub.at[idx, "jn_location"] = best_match.get("location", "")
                 df_sub.at[idx, "jn_detail_url"] = base_url + "/" + best_match.get("detail_url", "")
             else:
+                logger.warning(f"[{idx}] 最適な一致が見つからなかった。")
                 df_sub.at[idx, "jn_memo"] = "なんかこれは見つからなかったわ。検索 URL つけたからそれ見てみて。"
+
+            # NOTE: 無効なときがたくさんあるから、処理ごとに保存することにした。
+            df_sub.to_csv(output_csv, index=False, encoding="utf_8_sig")
         except Exception as e:
             df_sub.at[idx, "jn_memo"] = f"なんかエラー起きたわ: {str(e)}"
             logger.error(f"[{idx}] 処理中にエラー: {e}")
 
         # 進捗を表示。
         shared.show_progress_with_name(idx + 1, len(df_sub), row["name"])
-
-    df_sub.to_csv(output_csv, index=False, encoding="utf_8_sig")
 
     logger.info("end mkmk_help_2")
 
