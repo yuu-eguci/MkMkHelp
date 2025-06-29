@@ -13,14 +13,14 @@ pipenv sync
 
 # mkmk_help total_row を編集。
 
-# 実行。本物の URL の掲載を避けています。 URL は適切に変えること。
-time pipenv run python mkmk_help.py --base-url https://WWW.JAV.OR.JP --total-row 1
+# LEVEL1 実行。本物の URL の掲載を避けています。 URL は適切に変えること。
+time pipenv run python mkmk_help.py --base-url https://WWW.JAV.OR.JP --total-row 1 --output-csv mkmk_help_1.csv
 
-# 実行。
-time pipenv run python mkmk_help_2.py --csv ./mkmk.csv
+# LEVEL2 実行。
+time pipenv run python mkmk_help_2.py --jn-base-url https://WWW.JN.COM --csv mkmk_help_1.csv --output-csv mkmk_help_2.csv
 
 # 必要に応じて csv を xlsx に変換
-pipenv run python csv_to_xlsx.py --csv ./mkmk.csv --xlsx ./mkmk.xlsx
+pipenv run python csv_to_xlsx.py --csv ./mkmk_help_2.csv --xlsx ./mkmk.xlsx
 
 # 便利機能
 pipenv run python xlsx_to_csv.py --xlsx ./mkmk.xlsx --csv ./mkmk.csv

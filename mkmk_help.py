@@ -20,10 +20,12 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-url", default="", help="Base url")
     parser.add_argument("--total-row", type=int, default=1, help="Number of rows to fetch")
+    parser.add_argument("--output-csv", default="mkmk.csv", help="Output CSV file path (UTF-8 with BOM) ")
     args = parser.parse_args()
     base_url = args.base_url
     # メッチャおもろいんだけど一度の表示件数をコッチで決めれるｗ
     total_row = args.total_row
+    output_csv = args.output_csv
 
     list_url = f"{base_url}/compatible_organizations?page=1&standards=140012015&pageSize={total_row}&nationality=JPN&classification=28"  # noqa: E501
 
@@ -59,7 +61,7 @@ def main() -> None:
     # NOTE: 改行のため
     print()
 
-    save_to_csv(organizations, "mkmk.csv")
+    save_to_csv(organizations, output_csv)
 
     logger.info("end mkmk_help")
 
