@@ -65,9 +65,9 @@ def normalize_csv_data(text: str) -> str:
     if not text:
         return ""
     # 改行文字を半角スペースに変換 (CRLF を先に処理してから、残りの LF, CR を処理)
-    text = text.replace('\r\n', ' ').replace('\n', ' ').replace('\r', ' ')
+    text = text.replace("\r\n", " ").replace("\n", " ").replace("\r", " ")
     # 連続する空白を単一の空白に
-    text = ' '.join(text.split())
+    text = " ".join(text.split())
     return text.strip()
 
 
@@ -81,6 +81,37 @@ def fetch_html(url: str) -> str:
 
     soup = BeautifulSoup(response.text, "html.parser")
     return soup.prettify()
+
+
+def fetch_html_with_retry(url: str, max_retries: int = 3, wait_sec: int = 2) -> str:
+    """
+    リトライ機能付きで HTML を取得し、文字列を返す
+    """
+    # ブラウザらしいヘッダーを設定 (Accept-Encoding を削除して圧縮を無効化)
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",  # noqa: E501
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "Accept-Language": "ja,en-US;q=0.7,en;q=0.3",
+        "Connection": "keep-alive",
+        "Upgrade-Insecure-Requests": "1",
+    }
+
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(url, headers=headers, timeout=10)
+            response.raise_for_status()
+
+            # エンコーディングを明示的に設定
+            if response.encoding is None or response.encoding == "ISO-8859-1":
+                response.encoding = "utf-8"
+
+            return response.text
+
+        except requests.exceptions.RequestException:
+            if attempt < max_retries - 1:
+                time.sleep(wait_sec)
+            else:
+                raise
 
 
 def show_progress_with_name(current: int, total: int, name: str) -> None:
