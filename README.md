@@ -18,6 +18,8 @@ choco install googlechrome --ignore-checksums -y
 
 choco install vscode -y
 
+choco install git -y
+
 # ここでいったん ps 開き直す。
 
 pip install pipenv
