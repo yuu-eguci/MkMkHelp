@@ -58,7 +58,7 @@ def main() -> None:
 
         try:
             # HTML を取得します。
-            html = shared.fetch_html_with_retry(test_url)
+            html = shared.fetch_html_slowly(test_url, wait_sec=10)
             # NOTE: 連続アクセスをやめようか。
             sleep(0.5)
 

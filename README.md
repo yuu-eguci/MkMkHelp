@@ -7,6 +7,18 @@ MkMkHelp
 
 ## Install
 
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force
+[System.Net.ServicePointManager]::SecurityProtocol = "Tls12"
+iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+choco install python --version=3.10 -y
+
+# ここでいったん ps 開き直す。
+
+pip install pipenv
+```
+
 ```bash
 # pipenv + Python 3.10 ある前提
 pipenv sync
