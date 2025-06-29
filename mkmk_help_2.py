@@ -53,14 +53,19 @@ def main() -> None:
     df_sub["jn_memo"] = ""
 
     for idx, row in df_sub.iterrows():
-        test_url = row["jn_search_url"]
+        search_url = row["jn_search_url"]
         test_location = row["location"]
 
         try:
             # HTML を取得します。
-            html = shared.fetch_html_slowly(test_url, wait_sec=10)
+            html = shared.fetch_html_slowly(search_url, wait_sec=10)
             # NOTE: 連続アクセスをやめようか。
             sleep(0.5)
+
+            if '401 Error - Unauthorized Access' in html:
+                logger.error(f"[{idx}] アクセスが拒否 (401) されました: {search_url}")
+                df_sub.at[idx, "jn_memo"] = "拒否されたわ401。ｱﾁｬｰ!"
+                continue
 
             # デバッグ用に HTML をファイルに保存します。
             # debug_filename = "debug_output.html"

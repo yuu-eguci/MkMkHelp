@@ -16,6 +16,8 @@ choco install python --version=3.10 -y
 
 choco install googlechrome --ignore-checksums -y
 
+choco install vscode -y
+
 # ここでいったん ps 開き直す。
 
 pip install pipenv

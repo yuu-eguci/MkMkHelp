@@ -19,6 +19,7 @@ def fetch_html_slowly(url: str, wait_sec: int = 3) -> str:
     """
 
     options = Options()
+    # ヘッドレスモード (見えるウィンドウを出さずに裏でウィンドウを動かすこと) を有効化
     options.add_argument("--headless")
     # Cloudflare 回避のための設定
     options.add_argument("--no-sandbox")
