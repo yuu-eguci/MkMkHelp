@@ -41,6 +41,9 @@ def _convert_kanji_to_number(text: str) -> str:
     """
     漢数字を半角数値に変換する
     """
+    if not text:
+        return ""
+
     kanji_map = {
         "一": "1",
         "二": "2",
@@ -90,8 +93,8 @@ def calculate_address_similarity(addr1: str, addr2: str) -> float:
     city_pattern = r"([^都道府県]+?[市区町村])"
 
     # 都道府県を除去してから市区町村を抽出
-    addr1_without_pref = norm_addr1.replace(pref1.group(1), "")
-    addr2_without_pref = norm_addr2.replace(pref2.group(1), "")
+    addr1_without_pref = norm_addr1.replace(pref1.group(1), "") if pref1 else norm_addr1
+    addr2_without_pref = norm_addr2.replace(pref2.group(1), "") if pref2 else norm_addr2
 
     city1 = re.search(city_pattern, addr1_without_pref)
     city2 = re.search(city_pattern, addr2_without_pref)
@@ -120,7 +123,7 @@ def calculate_address_similarity(addr1: str, addr2: str) -> float:
         return min(similarity, 1.0)
 
     # 都道府県のみ一致
-    if pref1.group(1) == pref2.group(1):
+    if pref1 and pref2 and pref1.group(1) == pref2.group(1):
         return 0.3
 
     return 0.0
@@ -156,5 +159,11 @@ if __name__ == "__main__":
     similarity = calculate_address_similarity(
         "青森県FOO郡BAZ村大字BAR133番地70",
         "〒039-3213 青森県FOO郡BAZ村大字BAR１３３−７０",
+    )
+    print(f"{similarity:.2f}")
+
+    similarity = calculate_address_similarity(
+        "京都府FOO市BAR区大宮通仏光寺下る五坊大宮町9999番地",
+        "名古屋市東区泉9丁目99番1号　9999ビル内",
     )
     print(f"{similarity:.2f}")
