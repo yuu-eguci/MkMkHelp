@@ -20,7 +20,9 @@ choco install vscode -y
 
 choco install git -y
 
-# ここでいったん ps 開き直す。
+git clone https://github.com/yuu-eguci/MkMkHelp.git
+
+# ここで gitbash 開きたい。
 
 pip install pipenv
 ```
