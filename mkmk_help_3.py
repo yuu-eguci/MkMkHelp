@@ -8,7 +8,7 @@ import shared
 from name_similarity import find_best_match_by_name
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s [%(levelname)s] %(message)s")
 
 
 def main() -> None:
@@ -39,6 +39,14 @@ def main() -> None:
     df["jn_search_url"] = df["location_no_space"].apply(lambda x: jn.create_search_url(base_url, x))
 
     logger.info("検索 URL の作成おｋ")
+
+    # 空列を最初に作る
+    df["jn_tel"] = ""
+    df["jn_tel_hyphen"] = ""
+    df["jn_company_name"] = ""
+    df["jn_location"] = ""
+    df["jn_detail_url"] = ""
+    df["jn_memo"] = ""
 
     for idx, row in df.iterrows():
         search_url = row["jn_search_url"]

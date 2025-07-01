@@ -1,4 +1,8 @@
+import logging
 import re
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 def normalize_name_for_matching(name: str) -> str:
@@ -96,7 +100,7 @@ def find_best_match_by_name(search_results: list[dict], target_name: str, thresh
 
         # 類似度を計算
         score = calculate_name_similarity(target_name, company_name)
-        print(target_name, company_name, score)
+        logger.debug(f"名前マッチング: '{target_name}' vs '{company_name}' = {score:.2f}")
 
         if score > best_score:
             best_score = score
