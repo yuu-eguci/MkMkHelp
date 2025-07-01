@@ -60,8 +60,12 @@ def main() -> None:
                 df.at[idx, "jn_memo"] = "拒否されたわ401。ｱﾁｬｰ!"
                 continue
 
-            # TODO: 検索結果処理を実装予定
-            logger.info(f"[{idx}] HTML 取得おｋ")
+            # HTML から検索結果の一覧を取得する
+            search_results = jn.parse_search_results(html)
+
+            logger.info(f"[{idx}] 検索結果の取得おｋ: {len(search_results)} 件")
+
+            # TODO: 最適マッチ処理を実装予定
 
         except Exception as e:
             df.at[idx, "jn_memo"] = f"なんかエラー起きたわ: {str(e)}"

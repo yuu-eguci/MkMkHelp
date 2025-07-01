@@ -20,7 +20,7 @@ Level 3 は、住所で検索して名前でバリデーションして電話番
     - mkmk_help_2.py で、 for の最後で毎回 `to_csv` していたのは大正解だったので、踏襲したい。
     - ただ、エラー発生したら catch でエラーを `jn_memo` に書いて、 finally で `to_csv` が適切かな?
 - `shared.fetch_html_slowly` で HTML を取得する --> OK
-- `jn.parse_search_results` で検索結果を取得する。
+- `jn.parse_search_results` で検索結果を取得する --> OK
 - 既存の `jn.find_best_match` はリネームする。 --> OK
     - `find_best_match_by_location` かな。 (TODO: これ、住所の文字列がもっともマッチするものを探す、っていう意味になってる?)
 - 今回 Level 3 用の `jn.find_best_match_by_name` を作成する。 (TODO: これ、名前の文字列がもっともマッチするものを探す、っていう意味になってる?)
