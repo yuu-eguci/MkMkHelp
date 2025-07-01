@@ -106,22 +106,6 @@ def find_best_match_by_location(
     return None
 
 
-def find_best_match_by_name(search_results: list[dict], target_name: str, threshold: float = 0.7) -> dict | None:
-    """
-    検索結果から最適な名前マッチを見つける
-    Level 3 用: 住所で検索した結果から、名前でバリデーションする
-    """
-    if not search_results:
-        return None
-
-    # TODO: 名前マッチング戦略を実装
-    # - 両方の名前を正規化 (法人格除去、記号除去等)
-    # - 部分一致チェック (csv の name が "FOO株式会社" で、検索結果の name が "FOO" の場合等)
-    # - 類似度計算
-
-    return None
-
-
 def split_tel_field(tel_field: str) -> tuple[str, str]:
     """
     電話番号フィールドを分割する。

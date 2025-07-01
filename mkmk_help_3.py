@@ -5,6 +5,7 @@ import pandas as pd
 
 import jn
 import shared
+from name_similarity import find_best_match_by_name
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -65,7 +66,25 @@ def main() -> None:
 
             logger.info(f"[{idx}] 検索結果の取得おｋ: {len(search_results)} 件")
 
-            # TODO: 最適マッチ処理を実装予定
+            # 一覧の中から、もっとも適切っぽいものを選ぶ。
+            # Level 3: 住所で検索した結果から、名前でバリデーションする
+            best_match = find_best_match_by_name(search_results, test_name)
+
+            # それを csv へ!
+            if best_match:
+                logger.info(f"[{idx}] 最適な一致を見つけた: {best_match}")
+
+                tel_raw = best_match.get("tel", "")
+                tel_no_hyphen, tel_hyphen = jn.split_tel_field(tel_raw)
+
+                df.at[idx, "jn_tel"] = tel_no_hyphen
+                df.at[idx, "jn_tel_hyphen"] = tel_hyphen
+                df.at[idx, "jn_company_name"] = best_match.get("company_name", "")
+                df.at[idx, "jn_location"] = best_match.get("location", "")
+                df.at[idx, "jn_detail_url"] = base_url + "/" + best_match.get("detail_url", "")
+            else:
+                logger.warning(f"[{idx}] 最適な一致が見つからなかった。")
+                df.at[idx, "jn_memo"] = "住所検索したけど見つからなかったわ。検索 URL つけたからそれ見てみて。"
 
         except Exception as e:
             df.at[idx, "jn_memo"] = f"なんかエラー起きたわ: {str(e)}"
