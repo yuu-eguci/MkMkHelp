@@ -23,9 +23,9 @@ Level 3 は、住所で検索して名前でバリデーションして電話番
 - `jn.parse_search_results` で検索結果を取得する --> OK
 - 既存の `jn.find_best_match` はリネームする。 --> OK
     - `find_best_match_by_location` かな。 (TODO: これ、住所の文字列がもっともマッチするものを探す、っていう意味になってる?)
-- 今回 Level 3 用の `jn.find_best_match_by_name` を作成する。 (TODO: これ、名前の文字列がもっともマッチするものを探す、っていう意味になってる?)
+- 今回 Level 3 用の `jn.find_best_match_by_name` を作成する。 (TODO: これ、名前の文字列がもっともマッチするものを探す、っていう意味になってる?) --> OK
     - TODO: どんなマッチング戦略が良いか考える。 csv の name で検索結果に出なかったものが Level 3 の対象なのだ。だから、検索結果の name が、 csv の name に含まれているものがいいのかな。たとえば csv の name が "FOO株式会社" で、検索結果の name が "FOO" だったら検索から漏れる。そのとき、 FOO が FOO株式会社 に入ってるから、って感じでマッチングできればいいかな。
-- 最適マッチが見つかったら、
+- 最適マッチが見つかったら、 --> OK
     - mkmk_help_2.py と同じように jn_tel, jn_tel_hyphen, jn_company_name, jn_location, jn_detail_url を埋める
-- 最適マッチが見つからなかったら、
+- 最適マッチが見つからなかったら、 --> OK
     - jn_memo: 住所検索したけど見つからなかったわ。検索 URL つけたからそれ見てみて。

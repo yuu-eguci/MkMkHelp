@@ -90,6 +90,7 @@ def main() -> None:
                 df.at[idx, "jn_company_name"] = best_match.get("company_name", "")
                 df.at[idx, "jn_location"] = best_match.get("location", "")
                 df.at[idx, "jn_detail_url"] = base_url + "/" + best_match.get("detail_url", "")
+                df.at[idx, "jn_memo"] = "住所検索で電話番号を埋めた。"
             else:
                 logger.warning(f"[{idx}] 最適な一致が見つからなかった。")
                 df.at[idx, "jn_memo"] = "住所検索したけど見つからなかったわ。検索 URL つけたからそれ見てみて。"
@@ -101,10 +102,7 @@ def main() -> None:
             # 毎回保存する
             df.to_csv(output_csv, index=False, encoding="utf_8_sig")
 
-        # 進捗を表示。
-        shared.show_progress_with_name(idx + 1, len(df), row["name"])
-        # NOTE: 改行。
-        print()
+            logger.info(f"[{idx}] 処理完了 CSV 保存も OK: {test_name}")
 
     logger.info("end mkmk_help_3")
 
