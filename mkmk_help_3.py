@@ -26,6 +26,10 @@ def main() -> None:
 
     logger.info(f"設定: CSV={args.csv}, Base URL={base_url}, Output={output_csv}, Wait={wait_sec}秒")
 
+    # CSV を読み込みます。
+    df = pd.read_csv(args.csv)
+    logger.info(f"CSV 読み込みおｋ: {args.csv}")
+
     # TODO: 以降の処理を実装予定
 
     logger.info("end mkmk_help_3")
