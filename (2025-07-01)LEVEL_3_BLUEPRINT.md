@@ -21,7 +21,7 @@ Level 3 は、住所で検索して名前でバリデーションして電話番
     - ただ、エラー発生したら catch でエラーを `jn_memo` に書いて、 finally で `to_csv` が適切かな?
 - `shared.fetch_html_slowly` で HTML を取得する。
 - `jn.parse_search_results` で検索結果を取得する。
-- 既存の `jn.find_best_match` はリネームする。
+- 既存の `jn.find_best_match` はリネームする。 --> OK
     - `find_best_match_by_location` かな。 (TODO: これ、住所の文字列がもっともマッチするものを探す、っていう意味になってる?)
 - 今回 Level 3 用の `jn.find_best_match_by_name` を作成する。 (TODO: これ、名前の文字列がもっともマッチするものを探す、っていう意味になってる?)
     - TODO: どんなマッチング戦略が良いか考える。 csv の name で検索結果に出なかったものが Level 3 の対象なのだ。だから、検索結果の name が、 csv の name に含まれているものがいいのかな。たとえば csv の name が "FOO株式会社" で、検索結果の name が "FOO" だったら検索から漏れる。そのとき、 FOO が FOO株式会社 に入ってるから、って感じでマッチングできればいいかな。

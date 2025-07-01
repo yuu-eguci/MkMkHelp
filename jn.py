@@ -80,7 +80,7 @@ def parse_search_results(html: str) -> list[dict]:
     return results
 
 
-def find_best_match(search_results: list[dict], target_location: str, threshold: float = 0.7) -> dict | None:
+def find_best_match_by_location(search_results: list[dict], target_location: str, threshold: float = 0.7) -> dict | None:
     """
     検索結果から最適な住所マッチを見つける
     """

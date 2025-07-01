@@ -81,7 +81,7 @@ def main() -> None:
             # 一覧の中から、もっとも適切っぽいものを選ぶ。
             # "もっとも適切っぽい":
             #     csv から取得した住所と、 html から取得した住所 -> 正規化 -> 比較
-            best_match = jn.find_best_match(search_results, test_location)
+            best_match = jn.find_best_match_by_location(search_results, test_location)
 
             # それを csv へ!
             if best_match:
