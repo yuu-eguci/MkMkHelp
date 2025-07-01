@@ -30,16 +30,40 @@ def main() -> None:
     df = pd.read_csv(args.csv)
     logger.info(f"CSV 読み込みおｋ: {args.csv}")
 
-    # 検索ワード (次項で使う) を作成します。
-    # NOTE: 住所からスペースを除去して検索用に正規化
-    df["location_no_space"] = df["location"].apply(jn.remove_spaces)
+    # name_no_space の隣に location_no_space を配置
+    name_no_space_idx = df.columns.get_loc("name_no_space")
+    df.insert(name_no_space_idx + 1, "location_no_space", df["location"].apply(jn.remove_spaces))
 
     # 検索 URL の列を追加 (ここでは location_no_space を使う)
     df["jn_search_url"] = df["location_no_space"].apply(lambda x: jn.create_search_url(base_url, x))
 
     logger.info("検索 URL の作成おｋ")
 
-    # TODO: 以降の処理を実装予定
+    for idx, row in df.iterrows():
+        search_url = row["jn_search_url"]
+        test_name = row["name"]
+
+        # すでに電話番号が埋まってたらスキップ (NaN と空文字列以外)
+        jn_tel_value = row.get("jn_tel", "")
+        if pd.notna(jn_tel_value) and str(jn_tel_value).strip() != "":
+            logger.info(f"[{idx}] スキップ (すでに処理済み): {test_name}")
+            continue
+
+        try:
+            # TODO: HTML 取得と検索結果処理を実装予定
+            logger.info(f"[{idx}] 処理開始: {test_name}")
+
+        except Exception as e:
+            df.at[idx, "jn_memo"] = f"なんかエラー起きたわ: {str(e)}"
+            logger.error(f"[{idx}] 処理中にエラー: {e}")
+        finally:
+            # 毎回保存する
+            df.to_csv(output_csv, index=False, encoding="utf_8_sig")
+
+        # 進捗を表示。
+        shared.show_progress_with_name(idx + 1, len(df), row["name"])
+        # NOTE: 改行。
+        print()
 
     logger.info("end mkmk_help_3")
 

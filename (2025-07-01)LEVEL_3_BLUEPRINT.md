@@ -13,10 +13,10 @@ Level 3 は、住所で検索して名前でバリデーションして電話番
     - mkmk_help_2.py と同じ感じで。
 - 全部の列を取得する
     - 最終的には、もともとの csv に情報を追加するかたちにしたいので。
-- 検索 URL を作成する
+- 検索 URL を作成する --> OK
     - mkmk_help_2.py と同じように、だけど、名前ではなくて住所を使う。
     - `location_no_space` を作って、 `jn_search_url` を上書きする。
-- for で1行ずつ回していく
+- for で1行ずつ回していく --> OK
     - mkmk_help_2.py で、 for の最後で毎回 `to_csv` していたのは大正解だったので、踏襲したい。
     - ただ、エラー発生したら catch でエラーを `jn_memo` に書いて、 finally で `to_csv` が適切かな?
 - `shared.fetch_html_slowly` で HTML を取得する。
