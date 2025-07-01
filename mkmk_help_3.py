@@ -50,8 +50,18 @@ def main() -> None:
             continue
 
         try:
-            # TODO: HTML 取得と検索結果処理を実装予定
             logger.info(f"[{idx}] 処理開始: {test_name}")
+
+            # HTML を取得します。
+            html = shared.fetch_html_slowly(search_url, wait_sec=wait_sec)
+
+            if "401 Error - Unauthorized Access" in html:
+                logger.error(f"[{idx}] アクセスが拒否 (401) されました: {search_url}")
+                df.at[idx, "jn_memo"] = "拒否されたわ401。ｱﾁｬｰ!"
+                continue
+
+            # TODO: 検索結果処理を実装予定
+            logger.info(f"[{idx}] HTML 取得おｋ")
 
         except Exception as e:
             df.at[idx, "jn_memo"] = f"なんかエラー起きたわ: {str(e)}"
