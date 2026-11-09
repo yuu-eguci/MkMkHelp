@@ -42,17 +42,17 @@ def main() -> None:
 
     for i, org in enumerate(organizations):
         # 1社ずつ詳細画面にアクセス。
-        detail_html: str = fetch_html(org["url"])
-        # print(detail_html)
-        detail_json: dict = extract_next_data_from_html(detail_html)
-        # print(detail_json) # <-- json みたいならこれ
+        # NOTE: 1社失敗しても全体をパァにしないよう、住所を空にして続行する。
+        try:
+            detail_html: str = fetch_html(org["url"])
+            detail_json: dict = extract_next_data_from_html(detail_html)
+            location = detail_json["props"]["pageProps"]["organization"]["attributes"]["location"]
+        except Exception as e:
+            logger.error(f"詳細ページの取得に失敗したので住所は空にする: {org['url']} ({e!r})")
+            location = ""
         # NOTE: 順番を変えたいだけ。
         # [{name, location, url}, ...]
-        org = build_organization_data(
-            name=org["name"],
-            location=detail_json["props"]["pageProps"]["organization"]["attributes"]["location"],
-            url=org["url"],
-        )
+        org = build_organization_data(name=org["name"], location=location, url=org["url"])
         organizations[i] = org
         show_progress_with_name(i + 1, len(organizations), org["name"])
         # NOTE: 連続アクセスをやめようか。
