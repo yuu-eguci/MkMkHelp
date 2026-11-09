@@ -12,7 +12,7 @@ jb サイトの組織一覧から組織名と住所を集め、jn サイトで�
 
 | スクリプト | 入力 | やること | 出力 |
 | --- | --- | --- | --- |
-| `mkmk_help.py` (Level 1) | jb サイト | 組織一覧と各詳細ページから `name`, `location`, `url` を取得する。改行や連続空白は半角スペース 1 つにまとめる。 | CSV (UTF-8) |
+| `mkmk_help.py` (Level 1) | jb サイト | 組織一覧と各詳細ページから `name`, `location`, `url` を取得する。改行や連続空白は半角スペース 1 つにまとめる。詳細ページの取得に失敗した組織は `location` を空にして続行する。 | CSV (UTF-8) |
 | `mkmk_help_2.py` (Level 2) | Level 1 の CSV | 名前で jn サイトを検索し、住所がもっとも近い結果の電話番号を採用する。 | CSV (UTF-8 BOM) |
 | `mkmk_help_3.py` (Level 3) | Level 2 の CSV | `jn_tel` が空の行だけ、住所で jn サイトを検索し、名前がもっとも近い結果の電話番号を採用する。`jn_tel` が埋まっている行は Level 2 の値をそのまま残す。 | CSV (UTF-8 BOM) |
 | `csv_to_xlsx.py` | CSV | 主要な列だけを決まった順に選び、説明つきヘッダーにして xlsx にする。 | xlsx |
@@ -107,4 +107,3 @@ GitHub Actions (`.github/workflows/ci.yml`) が push と pull request で同じ�
 ## Room for improvement
 
 - ロギングが複数行に渡るときがあるから、 organization name は最初の数文字だけでいいかも
-- Level 1 は詳細ページの取得中にエラーになると CSV が出力されない
