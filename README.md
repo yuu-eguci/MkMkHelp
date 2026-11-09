@@ -14,7 +14,7 @@ jb サイトの組織一覧から組織名と住所を集め、jn サイトで�
 | --- | --- | --- | --- |
 | `mkmk_help.py` (Level 1) | jb サイト | 組織一覧と各詳細ページから `name`, `location`, `url` を取得する。改行や連続空白は半角スペース 1 つにまとめる。 | CSV (UTF-8) |
 | `mkmk_help_2.py` (Level 2) | Level 1 の CSV | 名前で jn サイトを検索し、住所がもっとも近い結果の電話番号を採用する。 | CSV (UTF-8 BOM) |
-| `mkmk_help_3.py` (Level 3) | Level 2 の CSV | 住所で jn サイトを検索し、名前がもっとも近い結果の電話番号を採用する。 | CSV (UTF-8 BOM) |
+| `mkmk_help_3.py` (Level 3) | Level 2 の CSV | `jn_tel` が空の行だけ、住所で jn サイトを検索し、名前がもっとも近い結果の電話番号を採用する。`jn_tel` が埋まっている行は Level 2 の値をそのまま残す。 | CSV (UTF-8 BOM) |
 | `csv_to_xlsx.py` | CSV | 主要な列だけを決まった順に選び、説明つきヘッダーにして xlsx にする。 | xlsx |
 | `xlsx_to_csv.py` | xlsx | xlsx を CSV に戻す。 | CSV (UTF-8) |
 | `sort_csv_by_reference.py` | CSV 2 つ | 対象 CSV を参照 CSV の `url` 順に並べ替える。参照にない行は末尾に残す。 | CSV (UTF-8 BOM) |
@@ -27,7 +27,9 @@ Level 2 / Level 3 が追加する列:
 - `jn_memo`: 見つからなかった、アクセスを拒否された (401)、エラーになった、などのメモ
 
 Level 2 は検索語として `name_no_space` 列も追加し、検索 URL だけを入れた中間ファイル `mkmk_help_2_jn_search_url.csv` も出力する。
-Level 3 は検索語として `location_no_space` 列を追加する。
+Level 3 は検索語として `location_no_space` 列を追加し、検索した行の `jn_search_url` を住所検索の URL に置き換える。
+CSV はすべての列を文字列として読み込むので、電話番号の先頭の 0 は保たれる。
+Level 3 の出力をもう一度 Level 3 に入力すると、まだ空の行だけを再処理する。
 
 ### マッチング方針
 
