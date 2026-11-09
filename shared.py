@@ -37,34 +37,35 @@ def fetch_html_slowly(url: str, wait_sec: int = 3) -> str:
     logger.info("options 準備おｋ")
 
     driver = webdriver.Chrome(options=options)
+    # NOTE: 例外が出ても Chrome を残さないよう、必ず quit する。
+    try:
+        # WebDriver の自動化検出を無効化
+        driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
 
-    # WebDriver の自動化検出を無効化
-    driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+        driver.get(url)
+        logger.info("driver.get おｋ")
 
-    driver.get(url)
-    logger.info("driver.get おｋ")
+        # Cloudflare チャレンジページかどうかをチェック。
+        if "Just a moment..." in driver.page_source or "Verify you are human" in driver.page_source:
+            logger.info("Cloudflare チャレンジページを検出、待機中...")
+            # より長い時間待機してチャレンジの完了を待つ
+            max_wait = 30  # 最大30秒待機
+            for i in range(max_wait):
+                time.sleep(1)
+                if "Just a moment..." not in driver.page_source and "Verify you are human" not in driver.page_source:
+                    logger.info(f"Cloudflare チャレンジ完了 ({i + 1}秒後)")
+                    break
+                if i == max_wait - 1:
+                    logger.warning("Cloudflare チャレンジのタイムアウト")
 
-    # Cloudflare チャレンジページかどうかをチェック。
-    if "Just a moment..." in driver.page_source or "Verify you are human" in driver.page_source:
-        logger.info("Cloudflare チャレンジページを検出、待機中...")
-        # より長い時間待機してチャレンジの完了を待つ
-        max_wait = 30  # 最大30秒待機
-        for i in range(max_wait):
-            time.sleep(1)
-            if "Just a moment..." not in driver.page_source and "Verify you are human" not in driver.page_source:
-                logger.info(f"Cloudflare チャレンジ完了 ({i + 1}秒後)")
-                break
-            if i == max_wait - 1:
-                logger.warning("Cloudflare チャレンジのタイムアウト")
+        # 通常の待機時間
+        time.sleep(wait_sec)
+        logger.info("sleep おｋ")
 
-    # 通常の待機時間
-    time.sleep(wait_sec)
-    logger.info("sleep おｋ")
-
-    html = driver.page_source
-    logger.info("page_source おｋ")
-
-    driver.quit()
+        html = driver.page_source
+        logger.info("page_source おｋ")
+    finally:
+        driver.quit()
     logger.info("driver.quit おｋ")
     return html
 
