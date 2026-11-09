@@ -98,12 +98,12 @@ def main() -> None:
             else:
                 logger.warning(f"[{idx}] 最適な一致が見つからなかった。")
                 df_sub.at[idx, "jn_memo"] = "なんかこれは見つからなかったわ。検索 URL つけたからそれ見てみて。"
-
-            # NOTE: 無効なときがたくさんあるから、処理ごとに保存することにした。
-            df_sub.to_csv(output_csv, index=False, encoding="utf_8_sig")
         except Exception as e:
             df_sub.at[idx, "jn_memo"] = f"なんかエラー起きたわ: {str(e)}"
             logger.error(f"[{idx}] 処理中にエラー: {e}")
+        finally:
+            # NOTE: 無効なときがたくさんあるから、 401 やエラーの行も含めて処理ごとに保存する。
+            df_sub.to_csv(output_csv, index=False, encoding="utf_8_sig")
 
         # 進捗を表示。
         shared.show_progress_with_name(idx + 1, len(df_sub), row["name"])
