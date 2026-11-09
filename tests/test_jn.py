@@ -42,8 +42,8 @@ def test_find_best_match_by_location():
         {"location": "東京都架空区1-2-3", "tel": "2"},
     ]
     assert jn.find_best_match_by_location(results, "東京都架空区1丁目2番3号") == results[1]
-    assert not jn.find_best_match_by_location(results, "大阪府架空市1-2-3")
-    assert not jn.find_best_match_by_location([], "東京都架空区1-2-3")
+    assert jn.find_best_match_by_location(results, "大阪府架空市1-2-3") is None
+    assert jn.find_best_match_by_location([], "東京都架空区1-2-3") is None
 
 
 def test_split_tel_field():

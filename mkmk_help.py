@@ -20,7 +20,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-url", default="", help="Base url")
     parser.add_argument("--total-row", type=int, default=1, help="Number of rows to fetch")
-    parser.add_argument("--output-csv", default="mkmk.csv", help="Output CSV file path (UTF-8 with BOM) ")
+    parser.add_argument("--output-csv", default="mkmk.csv", help="Output CSV file path (UTF-8)")
     args = parser.parse_args()
     base_url = args.base_url
     # メッチャおもろいんだけど一度の表示件数をコッチで決めれるｗ
