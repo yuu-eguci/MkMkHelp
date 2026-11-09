@@ -46,6 +46,21 @@ pipenv run python csv_to_xlsx.py --csv ./mkmk_help_2.csv --xlsx ./mkmk.xlsx
 pipenv run python xlsx_to_csv.py --xlsx ./mkmk.xlsx --csv ./mkmk.csv
 ```
 
+## Development
+
+```bash
+pipenv sync --dev
+
+# テスト。外部サイトにはアクセスせず、合成データだけを使う。
+pipenv run pytest
+
+# lint とフォーマットチェック。
+pipenv run ruff check .
+pipenv run ruff format --check .
+```
+
+GitHub Actions (`.github/workflows/ci.yml`) が push と pull request で同じチェックを実行する。
+
 ## Room for improvement
 
 - ロギングが複数行に渡るときがあるから、 organization name は最初の数文字だけでいいかも

@@ -62,7 +62,7 @@ def main() -> None:
             # NOTE: 連続アクセスをやめようか。
             sleep(0.5)
 
-            if '401 Error - Unauthorized Access' in html:
+            if "401 Error - Unauthorized Access" in html:
                 logger.error(f"[{idx}] アクセスが拒否 (401) されました: {search_url}")
                 df_sub.at[idx, "jn_memo"] = "拒否されたわ401。ｱﾁｬｰ!"
                 continue

@@ -1,5 +1,15 @@
 import re
 
+PREFECTURE_PATTERN = (
+    "("
+    "北海道|青森県|岩手県|宮城県|秋田県|山形県|福島県|茨城県|栃木県|群馬県|"
+    "埼玉県|千葉県|東京都|神奈川県|新潟県|富山県|石川県|福井県|山梨県|長野県|"
+    "岐阜県|静岡県|愛知県|三重県|滋賀県|京都府|大阪府|兵庫県|奈良県|和歌山県|"
+    "鳥取県|島根県|岡山県|広島県|山口県|徳島県|香川県|愛媛県|高知県|福岡県|"
+    "佐賀県|長崎県|熊本県|大分県|宮崎県|鹿児島県|沖縄県"
+    ")"
+)
+
 
 def normalize_address(address: str) -> str:
     """
@@ -80,10 +90,8 @@ def calculate_address_similarity(addr1: str, addr2: str) -> float:
         return 1.0
 
     # 都道府県の抽出と比較
-    prefecture_pattern = r"(北海道|青森県|岩手県|宮城県|秋田県|山形県|福島県|茨城県|栃木県|群馬県|埼玉県|千葉県|東京都|神奈川県|新潟県|富山県|石川県|福井県|山梨県|長野県|岐阜県|静岡県|愛知県|三重県|滋賀県|京都府|大阪府|兵庫県|奈良県|和歌山県|鳥取県|島根県|岡山県|広島県|山口県|徳島県|香川県|愛媛県|高知県|福岡県|佐賀県|長崎県|熊本県|大分県|宮崎県|鹿児島県|沖縄県)"
-
-    pref1 = re.search(prefecture_pattern, norm_addr1)
-    pref2 = re.search(prefecture_pattern, norm_addr2)
+    pref1 = re.search(PREFECTURE_PATTERN, norm_addr1)
+    pref2 = re.search(PREFECTURE_PATTERN, norm_addr2)
 
     # 都道府県が不一致 -> 0.0
     if pref1 and pref2 and pref1.group(1) != pref2.group(1):

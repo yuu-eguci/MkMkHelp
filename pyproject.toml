@@ -16,3 +16,7 @@ ignore = [] # 無視するエラーコードがあれば指定
 [tool.mypy]
 # 外部モジュールを無視
 ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

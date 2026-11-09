@@ -11,6 +11,11 @@ from selenium.webdriver.chrome.options import Options
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
+USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/91.0.4472.124 Safari/537.36"
+)
+
 
 def fetch_html_slowly(url: str, wait_sec: int = 3) -> str:
     """
@@ -28,9 +33,7 @@ def fetch_html_slowly(url: str, wait_sec: int = 3) -> str:
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option("useAutomationExtension", False)
     # User-Agent を設定
-    options.add_argument(
-        "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-    )
+    options.add_argument(f"--user-agent={USER_AGENT}")
     logger.info("options 準備おｋ")
 
     driver = webdriver.Chrome(options=options)
@@ -118,7 +121,7 @@ def fetch_html_with_retry(url: str, max_retries: int = 3, wait_sec: int = 2) -> 
     """
     # ブラウザらしいヘッダーを設定 (Accept-Encoding を削除して圧縮を無効化)
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",  # noqa: E501
+        "User-Agent": USER_AGENT,
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
         "Accept-Language": "ja,en-US;q=0.7,en;q=0.3",
         "Connection": "keep-alive",
