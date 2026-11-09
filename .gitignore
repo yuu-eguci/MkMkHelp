@@ -141,3 +141,4 @@ cython_debug/
 *.xlsx
 *.html
 *.csv
+.ruff_cache/
