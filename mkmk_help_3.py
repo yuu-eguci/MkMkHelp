@@ -28,35 +28,39 @@ def main() -> None:
     logger.info(f"設定: CSV={args.csv}, Base URL={base_url}, Output={output_csv}, Wait={wait_sec}秒")
 
     # CSV を読み込みます。
-    df = pd.read_csv(args.csv)
+    # NOTE: 電話番号の先頭の 0 を失わないよう、すべて文字列として読み込む。
+    df = pd.read_csv(args.csv, dtype=str, keep_default_na=False)
     logger.info(f"CSV 読み込みおｋ: {args.csv}")
 
-    # name_no_space の隣に location_no_space を配置
-    name_no_space_idx = df.columns.get_loc("name_no_space")
-    df.insert(name_no_space_idx + 1, "location_no_space", df["location"].apply(jn.remove_spaces))
+    # name_no_space の隣に location_no_space を配置 (Level 3 の出力を再入力したときは既にある)
+    if "location_no_space" not in df.columns:
+        name_no_space_idx = df.columns.get_loc("name_no_space")
+        df.insert(name_no_space_idx + 1, "location_no_space", df["location"].apply(jn.remove_spaces))
 
-    # 検索 URL の列を追加 (ここでは location_no_space を使う)
-    df["jn_search_url"] = df["location_no_space"].apply(lambda x: jn.create_search_url(base_url, x))
-
-    logger.info("検索 URL の作成おｋ")
-
-    # 空列を最初に作る
-    df["jn_tel"] = ""
-    df["jn_tel_hyphen"] = ""
-    df["jn_company_name"] = ""
-    df["jn_location"] = ""
-    df["jn_detail_url"] = ""
-    df["jn_memo"] = ""
+    # Level 2 の結果を残すため、無い列だけ空で作る
+    for column in [
+        "jn_search_url",
+        "jn_tel",
+        "jn_tel_hyphen",
+        "jn_company_name",
+        "jn_location",
+        "jn_detail_url",
+        "jn_memo",
+    ]:
+        if column not in df.columns:
+            df[column] = ""
 
     for idx, row in df.iterrows():
-        search_url = row["jn_search_url"]
         test_name = row["name"]
 
-        # すでに電話番号が埋まってたらスキップ (NaN と空文字列以外)
-        jn_tel_value = row.get("jn_tel", "")
-        if pd.notna(jn_tel_value) and str(jn_tel_value).strip() != "":
+        # すでに電話番号が埋まってたらスキップ
+        if row["jn_tel"].strip() != "":
             logger.info(f"[{idx}] スキップ (すでに処理済み): {test_name}")
             continue
+
+        # 検索 URL を住所検索のものに置き換える (ここでは location_no_space を使う)
+        search_url = jn.create_search_url(base_url, row["location_no_space"])
+        df.at[idx, "jn_search_url"] = search_url
 
         try:
             logger.info(f"[{idx}] 処理開始: {test_name}")
@@ -103,6 +107,9 @@ def main() -> None:
             df.to_csv(output_csv, index=False, encoding="utf_8_sig")
 
             logger.info(f"[{idx}] 処理完了 CSV 保存も OK: {test_name}")
+
+    # スキップだけで終わった場合も出力ファイルを作る
+    df.to_csv(output_csv, index=False, encoding="utf_8_sig")
 
     logger.info("end mkmk_help_3")
 
