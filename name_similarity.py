@@ -1,6 +1,8 @@
 import logging
 import re
 
+from jn import remove_spaces
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
@@ -25,14 +27,6 @@ def normalize_name_for_matching(name: str) -> str:
     return normalized
 
 
-def remove_spaces(name: str) -> str:
-    """
-    文字列をノーマライズする。
-    スペース除去だけ
-    """
-    return name.replace(" ", "").replace("　", "")
-
-
 def remove_corporate_type(name: str) -> str:
     """
     文字列をノーマライズする。
@@ -55,7 +49,7 @@ def normalize_symbols_and_zenkaku(name: str) -> str:
     return re.sub(r"[‐\ーｰ・,、。!！?？（）()［］【】｛｝「」『』]", "", name)
 
 
-def calculate_name_similarity(name1: str, name2: str, threshold: float = 0.7) -> float:
+def calculate_name_similarity(name1: str, name2: str) -> float:
     """
     名前の類似度を計算 (0.0-1.0)
     Level 3 用: 住所で検索した結果から、名前でバリデーションする
@@ -111,20 +105,3 @@ def find_best_match_by_name(search_results: list[dict], target_name: str, thresh
         return best_match
 
     return None
-
-
-# 動作確認用
-# pipenv run python name_similarity.py
-if __name__ == "__main__":
-    # テストケース
-    test_cases = [
-        ("FOO株式会社", "FOO"),
-        ("BAR 株式会社", "BAR"),
-        ("Baz Next Stage", "BazNextStage"),
-        ("QUXロジテック 株式会社", "QUXロジテック"),
-        ("全然違う会社", "別の会社"),
-    ]
-
-    for name1, name2 in test_cases:
-        similarity = calculate_name_similarity(name1, name2)
-        print(f"'{name1}' vs '{name2}': {similarity:.2f}")

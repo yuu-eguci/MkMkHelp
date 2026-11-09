@@ -67,12 +67,6 @@ def main() -> None:
                 df_sub.at[idx, "jn_memo"] = "拒否されたわ401。ｱﾁｬｰ!"
                 continue
 
-            # デバッグ用に HTML をファイルに保存します。
-            # debug_filename = "debug_output.html"
-            # with open(debug_filename, "w", encoding="utf-8") as f:
-            #     f.write(html)
-            # logger.info(f"デバッグ用 HTML を保存: {debug_filename}")
-
             # HTML から検索結果の一覧を取得する
             search_results = jn.parse_search_results(html)
 

@@ -1,5 +1,3 @@
-import re
-
 from bs4 import BeautifulSoup
 
 from address_similarity import calculate_address_similarity
@@ -14,24 +12,6 @@ def create_search_url(base_url: str, search_term: str) -> str:
 # スペース除去だけ
 def remove_spaces(name: str) -> str:
     return name.replace(" ", "").replace("　", "")
-
-
-# 文字列をノーマライズする。
-# 法人格除去だけ (スペースは残す)
-def remove_corporate_type(name: str) -> str:
-    return re.sub(r"(株式|有限|合同)会社", "", name)
-
-
-# 文字列をノーマライズする。
-# 全角英数字→半角 + 記号除去だけ (スペース除去なし)
-def normalize_symbols_and_zenkaku(name: str) -> str:
-    name = name.translate(
-        str.maketrans(
-            "０１２３４５６７８９ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ",
-            "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
-        )
-    )
-    return re.sub(r"[‐\ーｰ・,、。!！?？（）()［］【】｛｝「」『』]", "", name)
 
 
 def parse_search_results(html: str) -> list[dict]:
@@ -87,7 +67,7 @@ def find_best_match_by_location(
     検索結果から最適な住所マッチを見つける
     """
     if not search_results:
-        return {}
+        return None
 
     best_match = None
     best_score = 0.0
